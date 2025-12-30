@@ -1,0 +1,714 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>702Greens Daily Log</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: #f5f5f7;
+      color: #1d1d1f;
+      line-height: 1.6;
+    }
+
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+
+    header {
+      text-align: center;
+      margin-bottom: 40px;
+      padding: 30px 0;
+      border-bottom: 1px solid #d2d2d7;
+    }
+
+    h1 {
+      font-size: 32px;
+      font-weight: 600;
+      margin-bottom: 8px;
+    }
+
+    .subtitle {
+      font-size: 14px;
+      color: #86868b;
+    }
+
+    .date-display {
+      font-size: 13px;
+      color: #86868b;
+      margin-top: 8px;
+    }
+
+    .section {
+      background: white;
+      border-radius: 12px;
+      padding: 28px;
+      margin-bottom: 24px;
+      border: 1px solid #e5e5ea;
+    }
+
+    .section-title {
+      font-size: 18px;
+      font-weight: 600;
+      margin-bottom: 20px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid #f5f5f7;
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+      margin-bottom: 20px;
+    }
+
+    .form-grid.full {
+      grid-template-columns: 1fr;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+    }
+
+    label {
+      font-size: 13px;
+      font-weight: 600;
+      margin-bottom: 8px;
+      color: #1d1d1f;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    input[type="text"],
+    input[type="date"],
+    input[type="time"],
+    textarea,
+    select {
+      padding: 12px;
+      border: 1px solid #d2d2d7;
+      border-radius: 8px;
+      font-size: 14px;
+      font-family: inherit;
+      background: white;
+      color: #1d1d1f;
+      transition: border-color 0.2s;
+    }
+
+    input[type="text"]:focus,
+    input[type="date"]:focus,
+    input[type="time"]:focus,
+    textarea:focus,
+    select:focus {
+      outline: none;
+      border-color: #0071e3;
+      box-shadow: 0 0 0 3px rgba(0, 113, 227, 0.1);
+    }
+
+    textarea {
+      resize: vertical;
+      min-height: 80px;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', monospace;
+    }
+
+    .radio-group {
+      display: flex;
+      gap: 20px;
+      margin-top: 8px;
+    }
+
+    .radio-option {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    input[type="radio"] {
+      width: 18px;
+      height: 18px;
+      cursor: pointer;
+    }
+
+    .button-group {
+      display: flex;
+      gap: 12px;
+      margin-top: 24px;
+    }
+
+    button {
+      padding: 12px 24px;
+      border: none;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .btn-primary {
+      background: #0071e3;
+      color: white;
+      flex: 1;
+    }
+
+    .btn-primary:hover {
+      background: #0077ed;
+    }
+
+    .btn-primary:active {
+      background: #0066cc;
+    }
+
+    .btn-secondary {
+      background: #f5f5f7;
+      color: #0071e3;
+    }
+
+    .btn-secondary:hover {
+      background: #e8e8ed;
+    }
+
+    .status-badge {
+      display: inline-block;
+      padding: 4px 12px;
+      border-radius: 6px;
+      font-size: 12px;
+      font-weight: 600;
+      margin-bottom: 16px;
+    }
+
+    .status-green {
+      background: #ecf5e8;
+      color: #056b00;
+    }
+
+    .status-yellow {
+      background: #fff8e8;
+      color: #8b5900;
+    }
+
+    .status-red {
+      background: #ffe8e8;
+      color: #c41e3a;
+    }
+
+    /* Logs section */
+    .logs-section {
+      margin-top: 40px;
+      padding-top: 40px;
+      border-top: 1px solid #d2d2d7;
+    }
+
+    .logs-header {
+      font-size: 18px;
+      font-weight: 600;
+      margin-bottom: 20px;
+    }
+
+    .logs-table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    .logs-table thead {
+      background: #f5f5f7;
+    }
+
+    .logs-table th {
+      padding: 12px;
+      text-align: left;
+      font-size: 12px;
+      font-weight: 600;
+      color: #86868b;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      border-bottom: 1px solid #d2d2d7;
+    }
+
+    .logs-table td {
+      padding: 14px 12px;
+      font-size: 14px;
+      border-bottom: 1px solid #f5f5f7;
+    }
+
+    .logs-table tr:hover {
+      background: #fafafa;
+    }
+
+    .log-date {
+      font-weight: 600;
+    }
+
+    .log-status {
+      font-size: 12px;
+      padding: 4px 8px;
+      border-radius: 4px;
+      display: inline-block;
+    }
+
+    .log-status.yes {
+      background: #ecf5e8;
+      color: #056b00;
+    }
+
+    .log-status.no {
+      background: #ffe8e8;
+      color: #c41e3a;
+    }
+
+    .message {
+      padding: 16px;
+      border-radius: 8px;
+      margin-bottom: 16px;
+      font-size: 13px;
+    }
+
+    .message.success {
+      background: #ecf5e8;
+      color: #056b00;
+      border: 1px solid #d0e8c8;
+    }
+
+    .message.error {
+      background: #ffe8e8;
+      color: #c41e3a;
+      border: 1px solid #f0c4c4;
+    }
+
+    .empty-state {
+      text-align: center;
+      padding: 40px 20px;
+      color: #86868b;
+    }
+
+    .empty-state svg {
+      width: 48px;
+      height: 48px;
+      margin-bottom: 16px;
+      opacity: 0.5;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>702Greens</h1>
+      <p class="subtitle">Daily Farm Operations Log</p>
+      <p class="date-display" id="today-date"></p>
+    </header>
+
+    <div id="message"></div>
+
+    <div class="section">
+      <div class="section-title">Plan for Today</div>
+      <div class="form-grid">
+        <div class="form-group">
+          <label>Harvest</label>
+          <input type="text" id="plan_harvest" placeholder="E.g., Basil (5 trays), Sunflower (3 trays)">
+        </div>
+        <div class="form-group">
+          <label>Plant</label>
+          <input type="text" id="plan_plant" placeholder="E.g., Radish seeding (2 trays)">
+        </div>
+        <div class="form-group">
+          <label>Deliveries</label>
+          <input type="text" id="plan_deliveries" placeholder="E.g., Restaurant orders (2), Home subscriptions (5)">
+        </div>
+        <div class="form-group">
+          <label>Other</label>
+          <input type="text" id="plan_other" placeholder="Maintenance, cleaning, etc.">
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-title">What Was Done Today</div>
+      <div class="form-grid">
+        <div class="form-group">
+          <label>Harvest</label>
+          <input type="text" id="done_harvest" placeholder="What was actually harvested">
+        </div>
+        <div class="form-group">
+          <label>Plant</label>
+          <input type="text" id="done_plant" placeholder="What was actually planted">
+        </div>
+        <div class="form-group">
+          <label>Deliveries</label>
+          <input type="text" id="done_deliveries" placeholder="What was actually delivered">
+        </div>
+        <div class="form-group">
+          <label>Other</label>
+          <input type="text" id="done_other" placeholder="Other completed tasks">
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-title">SOP Completion</div>
+      <div class="form-group">
+        <label>All SOPs Complete?</label>
+        <div class="radio-group">
+          <div class="radio-option">
+            <input type="radio" id="sop_yes" name="sop_complete" value="YES">
+            <label for="sop_yes" style="margin: 0;">Yes</label>
+          </div>
+          <div class="radio-option">
+            <input type="radio" id="sop_no" name="sop_complete" value="NO">
+            <label for="sop_no" style="margin: 0;">No</label>
+          </div>
+        </div>
+      </div>
+      <div id="sop-details" style="display: none; margin-top: 16px;">
+        <div class="form-grid full">
+          <div class="form-group">
+            <label>What Was Missed?</label>
+            <input type="text" id="sop_missed" placeholder="E.g., Sanitization of harvest tool">
+          </div>
+          <div class="form-group">
+            <label>Why?</label>
+            <input type="text" id="sop_why" placeholder="E.g., Tool broke, ran out of time">
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-title">Yield Check</div>
+      <div class="form-group">
+        <label>Are Yields On Target?</label>
+        <div class="radio-group">
+          <div class="radio-option">
+            <input type="radio" id="yield_on" name="yield_on_target" value="YES">
+            <label for="yield_on" style="margin: 0;">Yes</label>
+          </div>
+          <div class="radio-option">
+            <input type="radio" id="yield_off" name="yield_on_target" value="NO">
+            <label for="yield_off" style="margin: 0;">No</label>
+          </div>
+        </div>
+      </div>
+      <div id="yield-details" style="display: none; margin-top: 16px;">
+        <div class="form-grid">
+          <div class="form-group">
+            <label>Which Crop?</label>
+            <input type="text" id="yield_crop" placeholder="E.g., Basil">
+          </div>
+          <div class="form-group">
+            <label>How Far Off & Why?</label>
+            <input type="text" id="yield_off_reason" placeholder="E.g., 2 lbs under due to humidity spike">
+          </div>
+        </div>
+        <div class="form-grid full">
+          <div class="form-group">
+            <label>Action Taken</label>
+            <textarea id="yield_action" placeholder="What did you do about it?"></textarea>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-title">Time Log</div>
+      <div class="form-grid">
+        <div class="form-group">
+          <label>Start Time</label>
+          <input type="time" id="time_start">
+        </div>
+        <div class="form-group">
+          <label>End Time</label>
+          <input type="time" id="time_end">
+        </div>
+        <div class="form-group">
+          <label>What Took the Most Time?</label>
+          <input type="text" id="time_drain" placeholder="E.g., Cleaning trays">
+        </div>
+        <div class="form-group">
+          <label>Why (if longer than expected)?</label>
+          <input type="text" id="time_why" placeholder="E.g., Found mold on 2 trays">
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-title">Plan for Tomorrow</div>
+      <div class="form-grid">
+        <div class="form-group">
+          <label>Harvest</label>
+          <input type="text" id="tomorrow_harvest" placeholder="What to harvest">
+        </div>
+        <div class="form-group">
+          <label>Plant</label>
+          <input type="text" id="tomorrow_plant" placeholder="What to plant">
+        </div>
+        <div class="form-group full">
+          <label>Main Focus / Risk</label>
+          <input type="text" id="tomorrow_focus" placeholder="Priority or risk to watch">
+        </div>
+        <div class="form-group full">
+          <label>Initials</label>
+          <input type="text" id="initials" placeholder="Your initials to sign off" maxlength="3" style="width: 80px;">
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="button-group">
+        <button class="btn-primary" onclick="saveDailyLog()">Submit Daily Log</button>
+        <button class="btn-secondary" onclick="clearForm()">Clear</button>
+      </div>
+    </div>
+
+    <div class="logs-section">
+      <div class="logs-header">Previous Logs</div>
+      <div id="logs-container"></div>
+    </div>
+  </div>
+
+  <script>
+    // Set today's date
+    function setTodayDate() {
+      const today = new Date();
+      const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+      document.getElementById('today-date').textContent = today.toLocaleDateString('en-US', options);
+      
+      document.getElementById('date-input').value = today.toISOString().split('T')[0];
+    }
+
+    // Load today's log if exists
+    async function loadTodayLog() {
+      try {
+        const response = await fetch('/api/logs/today');
+        const log = await response.json();
+        
+        if (log) {
+          populateForm(log);
+        }
+      } catch (error) {
+        console.error('Error loading today log:', error);
+      }
+    }
+
+    // Populate form from log data
+    function populateForm(log) {
+      document.getElementById('plan_harvest').value = log.plan_harvest || '';
+      document.getElementById('plan_plant').value = log.plan_plant || '';
+      document.getElementById('plan_deliveries').value = log.plan_deliveries || '';
+      document.getElementById('plan_other').value = log.plan_other || '';
+      
+      document.getElementById('done_harvest').value = log.done_harvest || '';
+      document.getElementById('done_plant').value = log.done_plant || '';
+      document.getElementById('done_deliveries').value = log.done_deliveries || '';
+      document.getElementById('done_other').value = log.done_other || '';
+      
+      if (log.sop_complete) {
+        document.getElementById(`sop_${log.sop_complete === 'YES' ? 'yes' : 'no'}`).checked = true;
+        toggleSopDetails();
+      }
+      
+      document.getElementById('sop_missed').value = log.sop_missed || '';
+      document.getElementById('sop_why').value = log.sop_why || '';
+      
+      if (log.yield_on_target) {
+        document.getElementById(`yield_${log.yield_on_target === 'YES' ? 'on' : 'off'}`).checked = true;
+        toggleYieldDetails();
+      }
+      
+      document.getElementById('yield_crop').value = log.yield_crop || '';
+      document.getElementById('yield_off_reason').value = log.yield_off_reason || '';
+      document.getElementById('yield_action').value = log.yield_action || '';
+      
+      document.getElementById('time_start').value = log.time_start || '';
+      document.getElementById('time_end').value = log.time_end || '';
+      document.getElementById('time_drain').value = log.time_drain || '';
+      document.getElementById('time_why').value = log.time_why || '';
+      
+      document.getElementById('tomorrow_harvest').value = log.tomorrow_harvest || '';
+      document.getElementById('tomorrow_plant').value = log.tomorrow_plant || '';
+      document.getElementById('tomorrow_focus').value = log.tomorrow_focus || '';
+      document.getElementById('initials').value = log.initials || '';
+    }
+
+    // Toggle SOP details visibility
+    function toggleSopDetails() {
+      const isNo = document.getElementById('sop_no').checked;
+      document.getElementById('sop-details').style.display = isNo ? 'block' : 'none';
+    }
+
+    // Toggle Yield details visibility
+    function toggleYieldDetails() {
+      const isOff = document.getElementById('yield_off').checked;
+      document.getElementById('yield-details').style.display = isOff ? 'block' : 'none';
+    }
+
+    // Add event listeners
+    document.getElementById('sop_yes').addEventListener('change', toggleSopDetails);
+    document.getElementById('sop_no').addEventListener('change', toggleSopDetails);
+    document.getElementById('yield_on').addEventListener('change', toggleYieldDetails);
+    document.getElementById('yield_off').addEventListener('change', toggleYieldDetails);
+
+    // Save daily log
+    async function saveDailyLog() {
+      const today = new Date().toISOString().split('T')[0];
+      
+      const logData = {
+        date: today,
+        plan_harvest: document.getElementById('plan_harvest').value,
+        plan_plant: document.getElementById('plan_plant').value,
+        plan_deliveries: document.getElementById('plan_deliveries').value,
+        plan_other: document.getElementById('plan_other').value,
+        done_harvest: document.getElementById('done_harvest').value,
+        done_plant: document.getElementById('done_plant').value,
+        done_deliveries: document.getElementById('done_deliveries').value,
+        done_other: document.getElementById('done_other').value,
+        sop_complete: document.querySelector('input[name="sop_complete"]:checked')?.value,
+        sop_missed: document.getElementById('sop_missed').value,
+        sop_why: document.getElementById('sop_why').value,
+        yield_on_target: document.querySelector('input[name="yield_on_target"]:checked')?.value,
+        yield_crop: document.getElementById('yield_crop').value,
+        yield_off_reason: document.getElementById('yield_off_reason').value,
+        yield_action: document.getElementById('yield_action').value,
+        time_start: document.getElementById('time_start').value,
+        time_end: document.getElementById('time_end').value,
+        time_drain: document.getElementById('time_drain').value,
+        time_why: document.getElementById('time_why').value,
+        tomorrow_harvest: document.getElementById('tomorrow_harvest').value,
+        tomorrow_plant: document.getElementById('tomorrow_plant').value,
+        tomorrow_focus: document.getElementById('tomorrow_focus').value,
+        initials: document.getElementById('initials').value
+      };
+
+      try {
+        const response = await fetch('/api/logs', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(logData)
+        });
+
+        const result = await response.json();
+        
+        if (result.success) {
+          showMessage('Daily log submitted. Claude is analyzing...', 'success');
+          loadAllLogs();
+          // Auto-hide message after 4 seconds
+          setTimeout(() => {
+            document.getElementById('message').innerHTML = '';
+          }, 4000);
+        } else {
+          showMessage('Error saving log', 'error');
+        }
+      } catch (error) {
+        showMessage(`Error: ${error.message}`, 'error');
+      }
+    }
+
+    // Clear form
+    function clearForm() {
+      document.getElementById('plan_harvest').value = '';
+      document.getElementById('plan_plant').value = '';
+      document.getElementById('plan_deliveries').value = '';
+      document.getElementById('plan_other').value = '';
+      document.getElementById('done_harvest').value = '';
+      document.getElementById('done_plant').value = '';
+      document.getElementById('done_deliveries').value = '';
+      document.getElementById('done_other').value = '';
+      document.getElementById('sop_yes').checked = false;
+      document.getElementById('sop_no').checked = false;
+      document.getElementById('sop_missed').value = '';
+      document.getElementById('sop_why').value = '';
+      document.getElementById('yield_on').checked = false;
+      document.getElementById('yield_off').checked = false;
+      document.getElementById('yield_crop').value = '';
+      document.getElementById('yield_off_reason').value = '';
+      document.getElementById('yield_action').value = '';
+      document.getElementById('time_start').value = '';
+      document.getElementById('time_end').value = '';
+      document.getElementById('time_drain').value = '';
+      document.getElementById('time_why').value = '';
+      document.getElementById('tomorrow_harvest').value = '';
+      document.getElementById('tomorrow_plant').value = '';
+      document.getElementById('tomorrow_focus').value = '';
+      document.getElementById('initials').value = '';
+      toggleSopDetails();
+      toggleYieldDetails();
+    }
+
+    // Show message
+    function showMessage(text, type) {
+      const messageEl = document.getElementById('message');
+      messageEl.innerHTML = `<div class="message ${type}">${text}</div>`;
+    }
+
+    // Load all logs and display in table
+    async function loadAllLogs() {
+      try {
+        const response = await fetch('/api/logs');
+        const logs = await response.json();
+
+        if (logs.length === 0) {
+          document.getElementById('logs-container').innerHTML = `
+            <div class="empty-state">
+              <p>No logs yet. Fill out and submit your first daily log above.</p>
+            </div>
+          `;
+          return;
+        }
+
+        let html = `
+          <table class="logs-table">
+            <thead>
+              <tr>
+                <th>Date</th>
+                <th>SOP</th>
+                <th>Yield</th>
+                <th>Time</th>
+                <th>Tomorrow Focus</th>
+              </tr>
+            </thead>
+            <tbody>
+        `;
+
+        logs.forEach(log => {
+          const sopStatus = log.sop_complete === 'YES' ? 'yes' : 'no';
+          const yieldStatus = log.yield_on_target === 'YES' ? 'yes' : 'no';
+          
+          html += `
+            <tr>
+              <td class="log-date">${new Date(log.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}</td>
+              <td><span class="log-status ${sopStatus}">${log.sop_complete || '-'}</span></td>
+              <td><span class="log-status ${yieldStatus}">${log.yield_on_target || '-'}</span></td>
+              <td>${log.time_start ? log.time_start + ' - ' + log.time_end : '-'}</td>
+              <td>${log.tomorrow_focus || '-'}</td>
+            </tr>
+          `;
+        });
+
+        html += `
+            </tbody>
+          </table>
+        `;
+
+        document.getElementById('logs-container').innerHTML = html;
+      } catch (error) {
+        console.error('Error loading logs:', error);
+        document.getElementById('logs-container').innerHTML = '<p>Error loading logs</p>';
+      }
+    }
+
+    // Initialize on page load
+    window.addEventListener('DOMContentLoaded', () => {
+      setTodayDate();
+      loadTodayLog();
+      loadAllLogs();
+    });
+  </script>
+</body>
+</html>
